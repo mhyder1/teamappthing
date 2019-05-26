@@ -8,35 +8,45 @@ export default class App extends Component {
     super(props);
     this.state = {
       booksArray: [],
+      url: 'https://www.googleapis.com/books/v1/volumes?q='
     };
     //this.
   }
 
   componentDidMount() {
-    this.bookSearch('donuts');
+    this.bookSearch('peter rabbit');
+  }
+
+  submit = search => e => {
+    e.preventDefault();
+    console.log('submitted...', search)
+    // let url = `${this.state.url}${search.searchTerm}&filter=${search.bookType}&printType=${search.printType}`
+    // // console.log(url)
+    // let URL = `${this.state.url}${encodeURIComponent('peter rabbit')}`
+    // console.log(URL)
+    this.bookSearch()
   }
 
   bookSearch(searchTerm) {
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`)
+    fetch(`${this.state.url}${searchTerm}`)
     .then(function(response) {
       return response.json();
     })
-    .then(function(booksJson) {
+    .then((booksJson) => {
+      console.log(booksJson)
       let arr = booksJson.items.map(item => {
         return {
           title: item.volumeInfo.title,
           subtitle: item.volumeInfo.subtitle,
           authors: item.volumeInfo.authors,
-          listprice: item.saleInfo.listPrice,
+          listprice: item.saleInfo.listPrice ? item.saleInfo.listPrice.amount : null,
           imgurl: item.volumeInfo.imageLinks.smallThumbnail,
         }
       });
-      return arr;
+      this.setState({
+        booksArray: arr
+      })
     })
-    // this.setState({
-    //   booksArray: booksArray
-    // })
-    // console.log(this.state);
   }
 
   render() {
@@ -45,7 +55,7 @@ export default class App extends Component {
         <header className="App-header">
           <h1>Googly Book Search</h1>
         </header>
-          <SearchForm />
+          <SearchForm handleSubmit={this.submit}/>
           <BookList books={this.state.booksArray} />
       </div>
     );

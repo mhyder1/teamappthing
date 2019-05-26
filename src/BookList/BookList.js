@@ -7,13 +7,19 @@ export default class BookList extends Component {
         books: []
     }
 
+    
     render() {
-        //console.log(this.props.books)
+        let list = this.props.books.map((book, index) => {
+            return(
+                <li key={index}>
+                    <Book {...book} />
+                </li>
+            ) 
+        })
+        
         return (
             <ul>
-                <li>
-                    {/* <Book /> */}
-                </li>
+                {list}
             </ul>   
         )
     }

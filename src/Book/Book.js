@@ -4,7 +4,7 @@ export default class Book extends Component {
     static defaultProps = {
         title: 'title',
         subtitle: '',
-        authors: ['author1', 'author 2'],
+        authors: '',
         listprice: 1,
         imgurl: 'http.whatever'
     }
@@ -12,11 +12,12 @@ export default class Book extends Component {
     render() {
         return (
             <div>
-                {this.props.title}
-                {this.props.subtitle}
+                <h1>{this.props.title}</h1>
+                <img src={this.props.imgurl} alt={this.props.title}/>
+                <p>{this.props.subtitle}</p>
                 {this.props.authors}
-                {this.props.listprice}
-                {this.props.imgurl}
+                {this.props.listprice && <p>Price: {this.props.listprice }</p>}
+                <hr/>
             </div>   
         )
     }
